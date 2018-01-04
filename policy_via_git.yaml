@@ -1,0 +1,26 @@
+namespace: 'stackertesting'
+stacker_bucket: ''
+
+package_sources:
+  git:
+    - uri: https://github.com/remind101/stacker_blueprints.git  # for generic resource
+      tag: 1.0.3
+
+stacks:
+- name: dummy-vpc
+  class_path: stacker.tests.fixtures.mock_blueprints.Dummy
+- name: dummy-policy:
+  class_path: stacker_blueprints.generic.GenericResourceCreator
+  variables:
+    Class: iam.ManagedPolicy
+    Output: Policy
+    Properties:
+      Description: Dummy stacker testing policy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Action:
+              - s3:*
+            Effect: Allow
+            Resource:
+              - arn:aws:s3:::all-simpsons-archives-ever-on-s3*/*
